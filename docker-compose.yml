@@ -1,0 +1,52 @@
+version: "3"
+
+services:
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile.server
+
+    # command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; ./main'
+    # develop:
+    #   watch:
+    #     - action: rebuild
+    #       path: "./"
+    #       target: /app/main
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    tty: true # for colorized log output
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@db:5432/postgres?sslmode=disable
+
+  runner:
+    build:
+      context: .
+      dockerfile: Dockerfile.runner
+
+    # command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; ./main'
+    # develop:
+    #   watch:
+    #     - action: rebuild
+    #       path: "./"
+    #       target: /app/main
+    depends_on:
+      - db
+    tty: true # for colorized log output
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@db:5432/postgres?sslmode=disable
+
+  db:
+    image: postgres:16.0-bookworm
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+volumes:
+  db-data:

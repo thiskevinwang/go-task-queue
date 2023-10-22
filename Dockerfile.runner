@@ -1,0 +1,20 @@
+# Use an official Golang runtime as a parent image
+FROM golang:1.21.3-bookworm as builder
+WORKDIR /app
+COPY go.mod /app
+COPY go.sum /app
+RUN go mod download
+
+COPY /runner /app/runner
+COPY /shared /app/shared
+# output binary named "main"
+RUN go build -o main runner/runner.go
+
+
+FROM golang:1.21.3-bookworm 
+WORKDIR /app
+COPY --from=builder /app/main /app/main
+
+
+# Run the Go app when the container starts
+CMD ["./main"]
