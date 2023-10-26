@@ -54,7 +54,7 @@ var L = hclog.New(&hclog.LoggerOptions{
 	Level: hclog.LevelFromString("TRACE"), // @level
 	// IncludeLocation: true,                           // @caller
 	JSONFormat: false,
-	Color:      hclog.AutoColor,
+	Color:      hclog.ForceColor,
 	// ColorHeaderOnly: true,
 	// DisableTime: true,
 })

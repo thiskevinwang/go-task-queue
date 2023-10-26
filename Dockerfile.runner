@@ -3,7 +3,7 @@ FROM golang:1.21.3-bookworm as builder
 WORKDIR /app
 COPY go.mod /app
 COPY go.sum /app
-RUN go mod download
+RUN --mount=type=cache,target=/Users/me/Library/Caches go mod download
 
 COPY /runner /app/runner
 COPY /shared /app/shared

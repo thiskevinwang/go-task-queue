@@ -1,21 +1,13 @@
 package shared
 
 import (
-	"database/sql"
-	"os"
-
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/database/postgres"
 	"github.com/hashicorp/go-hclog"
 )
 
 func RunMigrations(log hclog.Logger) {
-	dbUrl := os.Getenv("DATABASE_URL")
-
-	db, err := sql.Open("postgres", dbUrl)
-	if err != nil {
-		panic(err)
-	}
+	db := NewDB().DB
 	driver, err := postgres.WithInstance(db, &postgres.Config{})
 	if err != nil {
 		panic(err)

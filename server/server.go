@@ -73,6 +73,47 @@ func main() {
 
 	// start HTTP server on port 8080
 	router := http.NewServeMux()
+
+	db := shared.NewDB().DB
+	// list jobs
+
+	type GueJobRow struct {
+		ID         string  `json:"id"`
+		Priority   int     `json:"priority"`
+		RunAt      string  `json:"run_at"`
+		JobType    string  `json:"job_type"`
+		Args       string  `json:"args"`
+		ErrorCount int     `json:"error_count"`
+		LastError  *string `json:"last_error"`
+		Queue      string  `json:"queue"`
+		CreatedAt  string  `json:"created_at"`
+		UpdatedAt  string  `json:"updated_at"`
+	}
+
+	router.HandleFunc("/jobs", func(w http.ResponseWriter, r *http.Request) {
+		// job_id | priority | run_at | job_type | args | error_count | last_error | queue | created_at | updated_at
+		res, err := db.Query("SELECT * FROM gue_jobs")
+		if err != nil {
+			w.Write([]byte(err.Error()))
+		}
+		defer res.Close()
+
+		var rows []GueJobRow
+
+		for res.Next() {
+			var row GueJobRow
+			err := res.Scan(&row.ID, &row.Priority, &row.RunAt, &row.JobType, &row.Args, &row.ErrorCount, &row.LastError, &row.Queue, &row.CreatedAt, &row.UpdatedAt)
+			if err != nil {
+				w.Write([]byte(err.Error()))
+			}
+			rows = append(rows, row)
+		}
+
+		response, _ := json.Marshal(rows)
+
+		w.Write(response)
+	})
+
 	router.HandleFunc("/enqueue", func(w http.ResponseWriter, r *http.Request) {
 		query := r.URL.Query()
 		name := query.Get("name")
