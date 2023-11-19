@@ -39,3 +39,9 @@ check the web app
 ```
 watch -n 1 "curl http://localhost:3000"
 ```
+
+If the postgres password changes and you can't connect for some non-obvious reason, try this:
+
+```
+docker volume prune -a
+```

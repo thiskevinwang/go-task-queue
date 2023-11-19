@@ -3,8 +3,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.server
-
-    # command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; ./main'
+    command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; ./main'
     develop:
       watch:
         - action: rebuild
@@ -19,14 +18,14 @@ services:
       - db
     tty: true # for colorized log output
     environment:
-      - DATABASE_URL=postgres://postgres:postgres@db:5432/postgres?sslmode=disable
+      - DATABASE_URL=postgres://postgres:password@db:5432/postgres?sslmode=disable
 
   runner:
     build:
       context: .
       dockerfile: Dockerfile.runner
 
-    # command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; ./main'
+    command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; ./main'
     develop:
       watch:
         - action: rebuild
@@ -39,35 +38,34 @@ services:
       - db
     tty: true # for colorized log output
     environment:
-      - DATABASE_URL=postgres://postgres:postgres@db:5432/postgres?sslmode=disable
+      - DATABASE_URL=postgres://postgres:password@db:5432/postgres?sslmode=disable
 
-  web:
-    build:
-      context: ./web
-      dockerfile: ../Dockerfile.web
-    command: npm run dev
-    develop:
-      watch:
-        - action: sync
-          path: "./web"
-          target: /app
-          ignore:
-            - node_modules/
-        - action: rebuild
-          path: ./web/package.json
-    tty: true # for colorized log output
-    ports:
-      - "3000:3000"
+  # web:
+  #   build:
+  #     context: ./web
+  #     dockerfile: ../Dockerfile.web
+  #   command: npm run start
+  #   develop:
+  #     watch:
+  #       - action: sync+restart
+  #         path: "./web"
+  #         target: /app
+  #         ignore:
+  #           - node_modules/
+  #       - action: rebuild
+  #         path: ./web/package.json
+  #   tty: true # for colorized log output
+  #   ports:
+  #     - "3000:3000"
   db:
     image: postgres:16.0-bookworm
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_PASSWORD: password
       POSTGRES_DB: postgres
-    volumes:
-      - db-data:/var/lib/postgresql/data
+    # volumes:
+    #   - db-data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
-
-volumes:
-  db-data:
+# volumes:
+#   db-data:

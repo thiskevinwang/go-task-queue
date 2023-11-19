@@ -1,13 +1,12 @@
-import express from "express";
+import { Hono } from "hono";
+import { serve } from "@hono/node-server";
 
-const app = express();
+const app = new Hono();
 
-app.get("/", (req, res) => {
-  res.send(
-    "This is running nodemon, and Docker Compose resyncs on file changes"
-  );
+app.get("/", (c) => {
+  return c.text("Hello World");
 });
 
-app.listen(3000, () => {
-  console.log("Server running on port 3000");
+serve(app, (info) => {
+  console.log(`Server is running at ${info.address}:${info.port}`);
 });

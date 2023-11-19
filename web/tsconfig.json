@@ -20,7 +20,6 @@
     "strict": true,
     "moduleResolution": "node",
     "esModuleInterop": true,
-    "allowImportingTsExtensions": true,
     "resolveJsonModule": true
   },
   "exclude": ["node_modules"],
