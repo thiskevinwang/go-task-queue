@@ -21,6 +21,7 @@ require (
 
 require (
 	github.com/fatih/color v1.15.0 // indirect
+	github.com/julienschmidt/httprouter v1.3.0 // indirect
 	github.com/lmittmann/tint v1.0.3 // indirect
 	github.com/stretchr/testify v1.8.4 // indirect
 )
