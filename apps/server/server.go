@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"time"
 
-	"root/shared"
-	"root/shared/log"
+	"shared"
+	"shared/log"
 
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"github.com/joho/godotenv"

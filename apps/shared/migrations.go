@@ -1,7 +1,8 @@
 package shared
 
 import (
-	"root/shared/log"
+	"shared/log"
+
 	"strings"
 
 	"github.com/golang-migrate/migrate/v4"

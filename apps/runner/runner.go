@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"root/shared/log"
+	"shared/log"
 
 	"github.com/joho/godotenv"
 	"golang.org/x/sync/errgroup"

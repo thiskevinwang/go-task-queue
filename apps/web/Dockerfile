@@ -1,5 +1,6 @@
 FROM node:18-bookworm as builder
 WORKDIR /app
+COPY /apps/web /app/apps/web
 COPY package.json /app
 COPY package-lock.json /app
 RUN npm install
@@ -11,4 +12,4 @@ COPY . /app
 
 EXPOSE 3000
 
-CMD ["npm", "start"]
+CMD ["npm", "start", "-w", "apps/web"]

@@ -1,14 +1,16 @@
 # Use an official Golang runtime as a parent image
 FROM golang:1.21.3-bookworm as builder
 WORKDIR /app
-COPY go.mod /app
-COPY go.sum /app
-RUN --mount=type=cache,target=/Users/me/Library/Caches go mod download
+COPY /go.work /app
+COPY /go.work.sum /app
+RUN go work edit -dropuse=./apps/runner
 
-COPY /server /app/server
-COPY /shared /app/shared
+COPY /apps/server /app/apps/server
+COPY /apps/shared /app/apps/shared
+# RUN --mount=type=cache,target=/Users/me/Library/Caches go mod download
+
 # output binary named "main"
-RUN go build -o main server/server.go
+RUN go build -o main apps/server/server.go
 
 
 FROM golang:1.21.3-bookworm 

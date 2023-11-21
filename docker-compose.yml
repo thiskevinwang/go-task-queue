@@ -2,15 +2,15 @@ services:
   server:
     build:
       context: .
-      dockerfile: Dockerfile.server
+      dockerfile: ./apps/server/Dockerfile
     command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; ./main'
     develop:
       watch:
         - action: rebuild
-          path: "./shared"
+          path: "./apps/shared"
           target: /app/main
         - action: rebuild
-          path: "./server"
+          path: "./apps/server"
           target: /app/main
     ports:
       - "8080:8080"
@@ -23,7 +23,7 @@ services:
   runner:
     build:
       context: .
-      dockerfile: Dockerfile.runner
+      dockerfile: ./apps/runner/Dockerfile
 
     command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; ./main'
     develop:
@@ -40,23 +40,23 @@ services:
     environment:
       - DATABASE_URL=postgres://postgres:password@db:5432/postgres?sslmode=disable
 
-  # web:
-  #   build:
-  #     context: ./web
-  #     dockerfile: ../Dockerfile.web
-  #   command: npm run start
-  #   develop:
-  #     watch:
-  #       - action: sync+restart
-  #         path: "./web"
-  #         target: /app
-  #         ignore:
-  #           - node_modules/
-  #       - action: rebuild
-  #         path: ./web/package.json
-  #   tty: true # for colorized log output
-  #   ports:
-  #     - "3000:3000"
+  web:
+    build:
+      context: .
+      dockerfile: ./apps/web/Dockerfile
+    command: npm run start
+    develop:
+      watch:
+        - action: sync+restart
+          path: "./web"
+          target: /app
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: ./web/package.json
+    tty: true # for colorized log output
+    ports:
+      - "3000:3000"
   db:
     image: postgres:16.0-bookworm
     environment:
