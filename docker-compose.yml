@@ -8,10 +8,10 @@ services:
       watch:
         - action: rebuild
           path: "./apps/shared"
-          target: /app/main
+          target: /app/apps/shared
         - action: rebuild
           path: "./apps/server"
-          target: /app/main
+          target: /app/apps/shared
     ports:
       - "8080:8080"
     depends_on:
@@ -29,11 +29,11 @@ services:
     develop:
       watch:
         - action: rebuild
-          path: "./shared"
-          target: /app/main
+          path: "./apps/shared"
+          target: /app/apps/shared
         - action: rebuild
-          path: "./runner"
-          target: /app/main
+          path: "./apps/runner"
+          target: /app/apps/runner
     depends_on:
       - db
     tty: true # for colorized log output
@@ -49,7 +49,7 @@ services:
       watch:
         - action: sync+restart
           path: "./apps/web"
-          target: /app
+          target: /app/apps/web
           ignore:
             - node_modules/
         - action: rebuild

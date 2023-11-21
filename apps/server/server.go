@@ -58,6 +58,10 @@ func main() {
 
 	db := shared.NewDB().DB
 
+	router.GET("/", func(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+		w.Write([]byte("Hello from server"))
+	})
+
 	// #ListJobs
 	router.GET("/jobs", func(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		logger.Info("/jobs", "method", r.Method)
