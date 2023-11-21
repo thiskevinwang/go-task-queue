@@ -12,4 +12,4 @@ COPY . /app
 
 EXPOSE 3000
 
-CMD ["npm", "start", "-w", "apps/web"]
+CMD ["npm", "run", "start", "-w", "apps/web"]

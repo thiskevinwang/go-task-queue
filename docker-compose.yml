@@ -44,16 +44,16 @@ services:
     build:
       context: .
       dockerfile: ./apps/web/Dockerfile
-    command: npm run start
+    command: npm run start -w apps/web
     develop:
       watch:
         - action: sync+restart
-          path: "./web"
+          path: "./apps/web"
           target: /app
           ignore:
             - node_modules/
         - action: rebuild
-          path: ./web/package.json
+          path: ./apps/web/package.json
     tty: true # for colorized log output
     ports:
       - "3000:3000"
