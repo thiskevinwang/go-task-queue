@@ -6,7 +6,7 @@ COPY /go.work.sum /app
 RUN go work edit -dropuse=./apps/server
 
 COPY /apps/runner /app/apps/runner
-COPY /apps/shared /app/apps/shared
+COPY /packages/shared /app/packages/shared
 # RUN --mount=type=cache,target=/Users/me/Library/Caches go mod download
 
 # output binary named "main"

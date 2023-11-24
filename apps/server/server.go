@@ -9,7 +9,6 @@ import (
 	"shared"
 	"shared/log"
 
-	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"github.com/joho/godotenv"
 	"github.com/julienschmidt/httprouter"
 )
