@@ -21,7 +21,7 @@ type Logger struct {
 
 // convenience constructor
 func New(name string) Logger {
-	internal := newSlogLogger("logger")
+	internal := newSlogLogger(name)
 	return Logger{
 		&internal,
 	}

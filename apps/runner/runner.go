@@ -2,8 +2,8 @@ package main
 
 import (
 	"context"
-	"time"
 
+	"shared/heartbeat"
 	"shared/log"
 
 	"github.com/joho/godotenv"
@@ -13,29 +13,10 @@ import (
 func main() {
 	godotenv.Load()
 	logger := log.New("runner")
-	childLogger := logger.Named("child")
-	childLogger.Debug("Hello from child")
 
-	heartbeat := make(chan interface{})
-	go func() {
-		defer close(heartbeat)
-		pulse := time.Tick(time.Second * 10)
-		sendPulse := func(msg string) {
-			select {
-			case heartbeat <- msg:
-			default:
-			}
-		}
-		for {
-			<-pulse
-			sendPulse("🏃")
-		}
-	}()
-	go func() {
-		for msg := range heartbeat {
-			logger.Debug(msg.(string))
-		}
-	}()
+	heartbeat.StartHeartbeat(func(msg string) {
+		logger.Debug("Heartbeat", "msg", msg)
+	})
 
 	ctx := context.Background()
 
@@ -45,8 +26,6 @@ func main() {
 		logger.Info("Starting worker")
 		return nil
 	})
-
-	// send shutdown signal to worker
 
 	// run until Ctrl+C
 	<-gctx.Done()

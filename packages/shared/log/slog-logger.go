@@ -23,7 +23,7 @@ func newSlogLogger(name string) slogLogger {
 	internal := slog.New(tint.NewHandler(os.Stdout, &tint.Options{
 		Level:     slog.LevelDebug,
 		AddSource: true,
-	}))
+	})).With("name", name)
 
 	return slogLogger{
 		internal: *internal,
