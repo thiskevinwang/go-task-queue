@@ -51,7 +51,11 @@ func main() {
 	godotenv.Load()
 	// ignore err — Docker Compose will set the environment variables
 
-	shared.RunMigrations(logger)
+	err := shared.RunMigrations(logger)
+	if err != nil {
+		logger.Error("Migrations failed", "err", err)
+		panic(err)
+	}
 
 	// start HTTP server on port 8080
 	router := httprouter.New()

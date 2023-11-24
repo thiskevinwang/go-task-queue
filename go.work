@@ -3,5 +3,5 @@ go 1.21.3
 use (
 	./apps/runner
 	./apps/server
-	./apps/shared
+	./packages/shared
 )
