@@ -21,6 +21,9 @@ services:
       - DATABASE_URL=postgres://postgres:password@db:5432/postgres?sslmode=disable
 
   runner:
+    deploy:
+      mode: replicated
+      replicas: 0
     build:
       context: .
       dockerfile: ./apps/runner/Dockerfile
@@ -41,6 +44,9 @@ services:
       - DATABASE_URL=postgres://postgres:password@db:5432/postgres?sslmode=disable
 
   web:
+    deploy:
+      mode: replicated
+      replicas: 0
     build:
       context: .
       dockerfile: ./apps/web/Dockerfile
@@ -57,7 +63,9 @@ services:
     tty: true # for colorized log output
     ports:
       - "3000:3000"
+
   db:
+    restart: always
     image: postgres:16.0-bookworm
     environment:
       POSTGRES_USER: postgres

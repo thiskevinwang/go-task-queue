@@ -14,7 +14,7 @@ func main() {
 	godotenv.Load()
 	logger := log.New("runner")
 
-	heartbeat.StartHeartbeat(func(msg string) {
+	heartbeat.StartHeartbeat(3, func(msg string) {
 		logger.Debug("Heartbeat", "msg", msg)
 	})
 

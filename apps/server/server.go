@@ -1,9 +1,11 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 
 	"server/router"
+
 	"shared"
 	"shared/heartbeat"
 	"shared/log"
@@ -14,7 +16,7 @@ import (
 func main() {
 	logger := log.New("server")
 
-	heartbeat.StartHeartbeat(func(msg string) {
+	heartbeat.StartHeartbeat(10, func(msg string) {
 		logger.Debug("Heartbeat", "msg", msg)
 	})
 
@@ -35,8 +37,26 @@ func main() {
 		Logger: logger,
 		DB:     shared.NewDB().DB,
 	})
+	r.RegisterRoutes()
 
 	// start HTTP server on port 8080
 	logger.Debug("Starting HTTP server", "port", 8080)
-	http.ListenAndServe(":8080", r)
+
+	// apply middleware
+	wrapped := &Middleware{
+		handler: r,
+		logger:  log.New("middleware"),
+	}
+
+	http.ListenAndServe(":8080", wrapped)
+}
+
+type Middleware struct {
+	logger  log.Logger
+	handler http.Handler
+}
+
+func (m *Middleware) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	m.logger.Debug(fmt.Sprintf("<-- %s %s", r.Method, r.URL.Path))
+	m.handler.ServeHTTP(w, r)
 }
